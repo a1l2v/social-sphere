@@ -11,10 +11,12 @@ const UpdateProduct = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [categories, setCategories] = useState([]);
+  const [clubs, setClubs] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [club, setClub] = useState("");
   const [photo, setPhoto] = useState("");
   const [id, setId] = useState("");
   const [teamSize, setTeamSize] = useState("");
@@ -38,6 +40,7 @@ const UpdateProduct = () => {
       setEventDate(data.product.event_date);
       setContact(data.product.contact);
       setCategory(data.product.category._id);
+      setClub(data.product.club._id);
     } catch (error) {
       console.log(error);
       toast.error("Error fetching product details");
@@ -63,8 +66,23 @@ const UpdateProduct = () => {
     }
   };
 
+  const getAllClubs = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
+      if (data?.success) {
+        setClubs(data?.club);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong in fetching categories");
+    }
+  };
+
+
   useEffect(() => {
     getAllCategory();
+    getAllClubs();
   }, []);
 
   // Form validation
@@ -73,6 +91,7 @@ const UpdateProduct = () => {
     if (!description) return "Description is Required";
     if (!price) return "Price is Required";
     if (!category) return "Category is Required";
+    if (!club) return "Club is Required";
     if (!teamSize) return "Team size is Required";
     if (!venue) return "Venue is Required";
     if (!eventDate) return "Event date is Required";
@@ -98,6 +117,7 @@ const UpdateProduct = () => {
       productData.append("price", price);
       photo && productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("club", club);
       productData.append("team_size", teamSize);
       productData.append("venue", venue);
       productData.append("event_date", eventDate);
@@ -162,6 +182,21 @@ const UpdateProduct = () => {
                   </Option>
                 ))}
               </Select>
+              <Select
+                                bordered={true}
+                                placeholder="Select a club"
+                                size="large"
+                                showSearch
+                                className="w-full mb-4"
+                                onChange={(value) => setClub(value)}
+                                style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
+                              >
+                                {clubs?.map((c) => (
+                                  <Option key={c._id} value={c._id}>
+                                    {c.name}
+                                  </Option>
+                                ))}
+                              </Select>
 
               <div>
                 <label className="border border-gray-300 bg-white py-2 px-4 rounded-md shadow-sm cursor-pointer w-full text-center">
@@ -257,7 +292,7 @@ const UpdateProduct = () => {
                   className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md w-full"
                   onClick={handleDelete}
                 >
-                  DELETE PRODUCT
+                  DELETE PRODUCTT
                 </button>
               </div>
             </div>

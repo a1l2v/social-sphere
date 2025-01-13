@@ -16,6 +16,7 @@ const ProductDetails = () => {
   // Fetch product details when slug changes
   useEffect(() => {
     if (params?.slug) getProduct();
+    
   }, [params?.slug]);
 
   // Get product details
@@ -25,6 +26,7 @@ const ProductDetails = () => {
         `${apiUrl}/api/v1/event/get-event/${params.slug}`
       );
       setProduct(data?.product);
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -63,6 +65,7 @@ const ProductDetails = () => {
               <p className="text-lg text-gray-600">{product.description}</p>
 
               <div className="text-gray-800 space-y-2">
+              <p className="text-lg">Club: <span className="font-semibold">{product?.club?.name}</span></p>
                 <p className="text-xl font-medium">Price: ${product.price}</p>
                 <p className="text-lg">Category: <span className="font-semibold">{product?.category?.name}</span></p>
                 <p className="text-lg">Team Size: {product.team_size}</p>

@@ -57,16 +57,16 @@ const Events = () => {
                       More Info
                     </button>
                     <button
-                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
-                      onClick={() => {
-                        setCart([...cart, event]);
-                        localStorage.setItem("cart", JSON.stringify([...cart, event]));
-                        navigate('/cart');
-                        toast.success("Event Added to Cart");
-                      }}
-                    >
-                      Register
-                    </button>
+  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
+  onClick={() => {
+    setCart([...cart, event]); // cart is guaranteed to be an array
+    localStorage.setItem("cart", JSON.stringify([...cart, event]));
+    navigate('/cart');
+    toast.success("Event Added to Cart");
+  }}
+>
+  Register
+</button>
                   </div>
                 </div>
               </div>

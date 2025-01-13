@@ -40,7 +40,7 @@ export const createClubController = async (req, res) => {
 
 export const clubController = async (req, res) => {
   try {
-    const club = await clubModel.find({});
+    const club = await clubModel.find({}).select("-photo");
     res.status(200).send({
       success: true,
       message: "All clubs List",
@@ -57,6 +57,23 @@ export const clubController = async (req, res) => {
 };
 
 
+
+export const clubPhotoController = async (req, res) => {
+    try {
+      const club = await clubModel.findById(req.params.pid).select("photo");
+      if (club.photo.data) {
+        res.set("Content-type", club.photo.contentType);
+        return res.status(200).send(club.photo.data);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        message: "Erorr while getting photo",
+        error,
+      });
+    }
+  };
 
     
     
