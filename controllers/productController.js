@@ -5,7 +5,7 @@ import braintree from "braintree";
 
 export const createProductController = async (req, res) => {
   try {
-    const { name, slug, description, price, category,team_size, venue, event_date, contact } = req.fields;
+    const { name, slug, description, price, category,club,team_size, venue, event_date, contact } = req.fields;
 
     const { photo } = req.files;
     console.log(req.files);
@@ -19,6 +19,8 @@ export const createProductController = async (req, res) => {
           return res.status(500).send({ error: "Price is Required" });
         case !category:
           return res.status(500).send({ error: "Category is Required" });
+        case !club:
+          return res.status(500).send({ error: "Club is Required" });
         case !team_size:
           return res.status(500).send({ error: "Team size is Required" });
         case !venue:
@@ -81,7 +83,8 @@ export const getProductController = async (req, res) => {
       const product = await eventModel
         .findOne({ slug: req.params.slug })
         .select("-photo")
-        .populate("category");
+        .populate("category")
+        .populate("club");
       res.status(200).send({
         success: true,
         message: "Single Product Fetched",

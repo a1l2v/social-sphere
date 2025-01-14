@@ -1,12 +1,12 @@
 import express from "express";
 import { isAdmin, requireSignIn } from "./../middlewares/authMiddleware.js";
 import {
-    clubControlller,
-    createclubController,
-    deleteclubController,
-    singleclubController,
-    updateclubController,
+    clubController,
+    
+    createClubController,
+    clubPhotoController
   } from "./../controllers/clubController.js";
+import formidable from "express-formidable";
 
 const router = express.Router();
 
@@ -14,30 +14,16 @@ router.post(
   "/create-club",
   requireSignIn,
   isAdmin,
-  createclubController
+  formidable(),
+  createClubController
 );
 
-//update club
-router.put(
-  "/update-club/:id",
-  requireSignIn,
-  isAdmin,
-  updateclubController
-);
+
 
 //getALl club
-router.get("/get-club", clubControlller);
+router.get("/get-club", clubController);
 
-//single club
-router.get("/single-club/:slug", singleclubController);
-
-//delete club
-router.delete(
-  "/delete-club/:id",
-  requireSignIn,
-  isAdmin,
-  deleteclubController
-);
+router.get("/club-photo/:pid", clubPhotoController);
 
 
 export default router;

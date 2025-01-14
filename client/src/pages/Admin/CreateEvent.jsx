@@ -10,10 +10,12 @@ const { Option } = Select;
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [clubs, setClubs] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [club, setClub] = useState("");
   const [photo, setPhoto] = useState("");
   const [teamSize, setTeamSize] = useState("");
   const [venue, setVenue] = useState("");
@@ -34,9 +36,26 @@ const CreateProduct = () => {
     }
   };
 
+  const getAllClubs = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
+      if (data?.success) {
+        setClubs(data?.club);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong in fetching categories");
+    }
+  };
+
+
   useEffect(() => {
     getAllCategory();
+    getAllClubs();
   }, []);
+
+  
 
   // Frontend validation before submitting the product creation form
   const validateForm = () => {
@@ -44,6 +63,7 @@ const CreateProduct = () => {
     if (!description) return "Description is Required";
     if (!price) return "Price is Required";
     if (!category) return "Category is Required";
+    if (!club) return "Club is Required";
     if (!teamSize) return "Team size is Required";
     if (!venue) return "Venue is Required";
     if (!eventDate) return "Event date is Required";
@@ -69,6 +89,7 @@ const CreateProduct = () => {
       productData.append("price", price);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("club", club);
       productData.append("team_size", teamSize);
       productData.append("venue", venue);
       productData.append("event_date", eventDate);
@@ -118,6 +139,22 @@ const CreateProduct = () => {
                     </Option>
                   ))}
                 </Select>
+                <Select
+                  bordered={true}
+                  placeholder="Select a club"
+                  size="large"
+                  showSearch
+                  className="w-full mb-4"
+                  onChange={(value) => setClub(value)}
+                  style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
+                >
+                  {clubs?.map((c) => (
+                    <Option key={c._id} value={c._id}>
+                      {c.name}
+                    </Option>
+                  ))}
+                </Select>
+
 
                 {/* Photo Upload */}
                 <div>

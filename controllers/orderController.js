@@ -49,7 +49,6 @@ export const getOrderController = async (req, res) => {
       if (!order) {
         return res.status(404).json({ error: "Order not found" });
       }
-  
       // Respond with the price of the order
       res.status(200).json({
         success: true,

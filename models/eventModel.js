@@ -23,6 +23,11 @@ const eventSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
+    club: {
+      type: mongoose.ObjectId,
+      ref: "Club",
+      required: true,
+    },
     photo: {
       data: Buffer,
       contentType: String,
