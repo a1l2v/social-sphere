@@ -9,7 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import clubRoutes from "./routes/clubRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+
 
 import cors from "cors";
 
@@ -34,7 +34,7 @@ app.use("/api/v1/event", productRoutes);
 app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/club", clubRoutes);
-app.use('/api/v1/user', userRoutes);
+
 
 //rest api
 app.get("/", (req, res) => {
