@@ -9,7 +9,11 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import clubRoutes from "./routes/clubRoutes.js";
+<<<<<<< HEAD
 import adminRoutes from "./routes/adminRoute.js";
+=======
+
+>>>>>>> 5dbacd246d1a2a901a771685b8f71f0ed47568c5
 
 import cors from "cors";
 
@@ -35,6 +39,7 @@ app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/club", clubRoutes);
 app.use("/api/v1/admin", adminRoutes);
+
 
 //rest api
 app.get("/", (req, res) => {
