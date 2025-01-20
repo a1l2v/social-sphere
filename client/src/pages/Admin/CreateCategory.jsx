@@ -34,6 +34,8 @@ const CreateCategory = () => {
   };
 
   // Fetch all categories
+
+  
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(`${apiUrl}/api/v1/category/get-category`);

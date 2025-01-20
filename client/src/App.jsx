@@ -23,7 +23,7 @@ import CreateClub from "./pages/Admin/CreateClub";
 import Events from "./pages/Events";
 import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
-import { Payment } from "./pages/payment";
+import { Payment } from "./pages/Payment";
 function App() {
   return (
     <>

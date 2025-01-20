@@ -73,36 +73,22 @@ const Events = () => {
   const filterEvents = (clubID, categoryID, query) => {
     let filtered = events;
 
-    // Filter by club if selected
-   
-    
-
-    
-
-    // Filter by club if selected
     if (clubID) {
       filtered = filtered.filter((event) => event.club === clubID);
       console.log(filtered);
 
     }
 
-    // Filter by category if selected
     if (categoryID) {
 
       filtered = filtered.filter((event) => event.category._id === categoryID);
     }
 
-    // Filter by search query if entered
     if (query) {
       filtered = filtered.filter((event) =>
         event.name.toLowerCase().includes(query.toLowerCase())
       );
     }
-
-      
-   
-    
-
 
     setFilteredEvents(filtered);
   };
