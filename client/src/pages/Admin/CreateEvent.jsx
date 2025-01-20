@@ -1,131 +1,257 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
-import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import AdminMenu from "./../../components/Layout/AdminMenu";
 import toast from "react-hot-toast";
-import { useAuth } from "../../context/auth";
+import axios from "axios";
+import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
+const { Option } = Select;
 
-// Importing the image
-import signinImage from "./../assets/names/signin.jpeg";
-
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth();
-
+const CreateProduct = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [categories, setCategories] = useState([]);
+  const [clubs, setClubs] = useState([]);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
+  const [club, setClub] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [teamSize, setTeamSize] = useState("");
+  const [venue, setVenue] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [contact, setContact] = useState("");
 
-  // form function
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const apiUrl = import.meta.env.VITE_API_URL;
+  // Fetch all categories
+  const getAllCategory = async () => {
     try {
-      const res = await axios.post(`${apiUrl}/api/v1/auth/login`, {
-        email,
-        password,
-      });
-      if (res && res.data.success) {
-        toast.success(res.data && res.data.message);
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
-        navigate(location.state || "/");
-      } else {
-        toast.error(res.data.message);
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const { data } = await axios.get(`${apiUrl}/api/v1/category/get-category`);
+      if (data?.success) {
+        setCategories(data?.category);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      toast.error("Something went wrong in fetching categories");
+    }
+  };
+
+  const getAllClubs = async () => {
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
+      if (data?.success) {
+        setClubs(data?.club);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong in fetching categories");
+    }
+  };
+
+
+  useEffect(() => {
+    getAllCategory();
+    getAllClubs();
+  }, []);
+
+  
+
+  // Frontend validation before submitting the product creation form
+  const validateForm = () => {
+    if (!name) return "Name is Required";
+    if (!description) return "Description is Required";
+    if (!price) return "Price is Required";
+    if (!category) return "Category is Required";
+    if (!club) return "Club is Required";
+    if (!teamSize) return "Team size is Required";
+    if (!venue) return "Venue is Required";
+    if (!eventDate) return "Event date is Required";
+    if (!contact) return "Contact information is Required";
+    if (photo && photo.size > 1000000) return "Photo should be less than 1MB";
+    return null;
+  };
+
+  // Create product function
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    const errorMessage = validateForm();
+    const apiUrl = import.meta.env.VITE_API_URL;
+    if (errorMessage) {
+      toast.error(errorMessage);
+      return;
+    }
+
+    try {
+      const EventData = new FormData();
+      EventData.append("name", name);
+      EventData.append("description", description);
+      EventData.append("price", price);
+      EventData.append("photo", photo);
+      EventData.append("category", category);
+      EventData.append("club", club);
+      EventData.append("team_size", teamSize);
+      EventData.append("venue", venue);
+      EventData.append("event_date", eventDate);
+      EventData.append("contact", contact);
+
+      const { data } = await axios.post(`${apiUrl}/api/v1/event/create-event`, EventData);
+      if (data?.success) {
+        toast.success("Product Created Successfully");
+        navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong while creating the product");
     }
   };
 
   return (
-    <Layout title="Login - Social Sphere">
-      <div className="flex min-h-screen">
-        {/* Left side (Login Form) */}
-        <div className="w-full md:w-1/2 bg-white flex justify-center items-center p-8">
-          <div className="w-full max-w-md">
-            <h4 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-              Welcome Back!
-            </h4>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label htmlFor="email" className="block text-lg font-medium text-gray-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter Your Email"
-                  className="w-full px-4 py-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
+    <Layout title={"Dashboard - Create EVENT"}>
+      <div className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 min-h-screen">
+        <div className="container mx-auto p-6">
+          <div className="grid grid-cols-12 gap-6">
+            {/* Admin Menu */}
+            <div className="col-span-12 md:col-span-3">
+              <AdminMenu />
+            </div>
 
-              <div className="mb-6">
-                <label htmlFor="password" className="block text-lg font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter Your Password"
-                  className="w-full px-4 py-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
+            {/* Main content for creating product */}
+            <div className="col-span-12 md:col-span-9">
+              <h1 className="text-3xl font-semibold mb-6 text-gray-800">Create Event</h1>
 
-              <div className="mb-4 flex justify-between items-center">
-                <button
-                  type="button"
-                  className="text-blue-500 hover:text-blue-700 text-sm"
-                  onClick={() => {
-                    navigate("/forgot-password");
-                  }}
+              <div className="space-y-6 w-full md:w-3/4">
+                {/* Category Select */}
+                <Select
+                  bordered={true}
+                  placeholder="Select a category"
+                  size="large"
+                  showSearch
+                  className="w-full mb-4"
+                  onChange={(value) => setCategory(value)}
+                  style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
                 >
-                  Forgot Password?
+                  {categories?.map((c) => (
+                    <Option key={c._id} value={c._id}>
+                      {c.name}
+                    </Option>
+                  ))}
+                </Select>
+                <Select
+                  bordered={true}
+                  placeholder="Select a club"
+                  size="large"
+                  showSearch
+                  className="w-full mb-4"
+                  onChange={(value) => setClub(value)}
+                  style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
+                >
+                  {clubs?.map((c) => (
+                    <Option key={c._id} value={c._id}>
+                      {c.name}
+                    </Option>
+                  ))}
+                </Select>
+
+
+                {/* Photo Upload */}
+                <div>
+                  <label className="border-2 border-gray-300 bg-white py-2 px-4 rounded-md shadow-sm cursor-pointer w-full text-center">
+                    {photo ? photo.name : "Upload Photo"}
+                    <input
+                      type="file"
+                      name="photo"
+                      accept="image/*"
+                      onChange={(e) => setPhoto(e.target.files[0])}
+                      hidden
+                    />
+                  </label>
+                </div>
+
+                {/* Photo Preview */}
+                {photo && (
+                  <div className="text-center mt-4">
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      alt="product_photo"
+                      className="h-52 mx-auto object-cover rounded-md"
+                    />
+                  </div>
+                )}
+
+                {/* Product Details Inputs */}
+                <div className="space-y-4">
+                  <input
+                    type="text"
+                    value={name}
+                    placeholder="Event Name"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+
+                  <textarea
+                    value={description}
+                    placeholder="Event Description"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+
+                  <input
+                    type="number"
+                    value={price}
+                    placeholder="Event Price"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    value={teamSize}
+                    placeholder="Team Size"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setTeamSize(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    value={venue}
+                    placeholder="Venue"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setVenue(e.target.value)}
+                  />
+
+                  <input
+                    type="date"
+                    value={eventDate}
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setEventDate(e.target.value)}
+                  />
+
+                  <input
+                    type="text"
+                    value={contact}
+                    placeholder="Contact Information"
+                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
+                    onChange={(e) => setContact(e.target.value)}
+                  />
+                </div>
+
+                {/* Create Product Button */}
+                <button
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full"
+                  onClick={handleCreate}
+                >
+                  CREATE EVENT
                 </button>
               </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none transition-all duration-300"
-              >
-                Login
-              </button>
-
-              <div className="mt-4 text-center">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => navigate("/signup")}
-                    className="text-blue-600 hover:text-blue-700"
-                  >
-                    Sign Up
-                  </button>
-                </p>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
-
-        {/* Right side (Image) */}
-        <div className="hidden md:flex w-1/2">
-          <img
-            src={signinImage}
-            alt="Sign In"
-            className="w-full h-full object-cover"
-          />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default Login;
+export default CreateProduct;

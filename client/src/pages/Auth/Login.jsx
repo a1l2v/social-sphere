@@ -5,6 +5,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
 
+// Importing the image
+import signinImage from "./../assets/names/signin.jpeg";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,11 +115,13 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Right side (Abstract Design) */}
-        <div className="hidden md:flex w-1/2 bg-gradient-to-br from-purple-600 to-blue-500 justify-center items-center">
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="bg-white opacity-50 w-3/4 h-3/4 rounded-lg"></div>
-          </div>
+        {/* Right side (Image) */}
+        <div className="hidden md:flex w-1/2">
+          <img
+            src={signinImage}
+            alt="Sign In"
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
     </Layout>
