@@ -111,7 +111,7 @@ const CartPage = () => {
                 <div className="ml-4 flex-1">
                   <h2 className="font-semibold text-lg">{p.name}</h2>
                   <p className="text-gray-600 text-sm">
-                    {p.description.substring(0, 30)}...
+                      {p.description ? p.description.substring(0, 30) : "No description available"}...
                   </p>
                   <p className="text-green-600 font-medium">
                     Price: ₹{p.price}
