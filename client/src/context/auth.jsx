@@ -33,6 +33,8 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (auth?.user && auth?.token) {
       localStorage.setItem("auth", JSON.stringify(auth));
+    } else {
+      localStorage.removeItem("auth"); // Clear localStorage on logout
     }
   }, [auth]);
 

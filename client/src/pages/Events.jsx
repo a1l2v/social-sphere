@@ -15,6 +15,10 @@ const Events = () => {
   const [categories, setCategories] = useState([]); // Categories state
   const [selectedClub, setSelectedClub] = useState(""); // Selected club for filtering
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category for filtering
+
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
+
   const navigate = useNavigate();
   const [cart, setCart] = useCart();
 
@@ -35,7 +39,7 @@ const Events = () => {
       const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
       if (data?.success) {
         setClubs(data?.club);
-         // Store clubs with their IDs
+
       }
     } catch (error) {
       console.log(error);
@@ -46,12 +50,11 @@ const Events = () => {
   // Fetch categories from the backend
   const getAllCategory = async () => {
     try {
-      
+
       const { data } = await axios.get(`${apiUrl}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
-        
-         // Store clubs with their IDs
+
       }
     } catch (error) {
       console.log(error);
@@ -61,14 +64,18 @@ const Events = () => {
 
   useEffect(() => {
     getAllEvents();
-    getAllClubs(); // Fetch clubs on component mount
-    getAllCategory(); // Fetch categories on component mount
-    
+
+    getAllClubs();
+    getAllCategory();
   }, []);
 
-  // Handle filtering events by club and category
-  const filterEvents = (clubID, categoryID) => {
+  // Handle filtering events by club, category, and search query
+  const filterEvents = (clubID, categoryID, query) => {
     let filtered = events;
+
+    // Filter by club if selected
+   
+    
 
     
 
@@ -76,29 +83,67 @@ const Events = () => {
     if (clubID) {
       filtered = filtered.filter((event) => event.club === clubID);
       console.log(filtered);
+
     }
 
     // Filter by category if selected
     if (categoryID) {
-      filtered = filtered.filter((event) =>{
-        event.category._id === categoryID} );
-      
+
+      filtered = filtered.filter((event) => event.category._id === categoryID);
     }
+
+    // Filter by search query if entered
+    if (query) {
+      filtered = filtered.filter((event) =>
+        event.name.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+      
+   
     
+
 
     setFilteredEvents(filtered);
   };
 
-  // Handle club selection and filter events
-  const handleClubChange = (clubID) => {
-    setSelectedClub(clubID);
-    filterEvents(clubID, selectedCategory);
+
+  // Handle search input change
+  const handleSearchChange = (query) => {
+    setSearchQuery(query);
+
+    // Update search suggestions
+    if (query) {
+      const suggestions = events.filter((event) =>
+        event.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchSuggestions(suggestions);
+    } else {
+      setSearchSuggestions([]);
+    }
+
+    // Filter events
+    filterEvents(selectedClub, selectedCategory, query);
   };
 
-  // Handle category selection and filter events
+  // Handle selection from the dropdown
+  const handleSuggestionSelect = (eventName) => {
+    setSearchQuery(eventName);
+    setSearchSuggestions([]);
+    filterEvents(selectedClub, selectedCategory, eventName);
+  };
+
+  // Handle club selection
+  const handleClubChange = (clubID) => {
+    setSelectedClub(clubID);
+    filterEvents(clubID, selectedCategory, searchQuery);
+  };
+
+  // Handle category selection
   const handleCategoryChange = (categoryID) => {
     setSelectedCategory(categoryID);
-    filterEvents(selectedClub, categoryID);
+    filterEvents(selectedClub, categoryID, searchQuery);
+
   };
 
   return (
@@ -112,6 +157,33 @@ const Events = () => {
           >
             Upcoming Events
           </h1>
+
+
+          {/* Search Bar */}
+          <div className="relative mb-8">
+  <input
+    type="text"
+    placeholder="Search events by name..."
+    value={searchQuery}
+    onChange={(e) => handleSearchChange(e.target.value)}
+    className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
+  {/* Dropdown List */}
+  {searchSuggestions.length > 0 && (
+    <div className="absolute left-0 right-0 mx-auto z-10 bg-white border border-gray-300 rounded-lg mt-2 w-full md:w-1/2">
+      {searchSuggestions.map((event) => (
+        <div
+          key={event._id}
+          onClick={() => handleSuggestionSelect(event.name)}
+          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+        >
+          {event.name}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
 
           {/* Club Filter */}
           <div className="mb-8">
@@ -175,7 +247,7 @@ const Events = () => {
             </div>
           </div>
 
-          
+
           {/* Events Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredEvents.map((event) => (
@@ -199,9 +271,13 @@ const Events = () => {
                   <p className="text-sm text-gray-500">
                     Date: {new Date(event.event_date).toLocaleDateString()}
                   </p>
+
+                  <p className="text-sm text-gray-500">Team Size: {event.team_size}</p>
+
                   <p className="text-sm text-gray-500">
                     Team Size: {event.team_size}
                   </p>
+
                   <div className="mt-4 flex justify-between">
                     <button
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
@@ -214,7 +290,11 @@ const Events = () => {
                       onClick={() => {
                         setCart([...cart, event]);
                         localStorage.setItem("cart", JSON.stringify([...cart, event]));
+
+                        navigate("/cart");
+
                         navigate('/cart');
+
                         toast.success("Event Added to Cart");
                       }}
                     >
