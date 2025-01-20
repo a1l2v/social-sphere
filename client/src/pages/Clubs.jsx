@@ -45,17 +45,20 @@ const ClubsList = () => {
                   className="bg-white shadow-lg rounded-lg p-6 transform hover:scale-105 transition-transform duration-300"
                 >
                   <div className="flex justify-center md:justify-start">
-  <img
-    src={`${apiUrl}/api/v1/club/club-photo/${club._id}`}
-    alt={club.name}
-    className="object-contain "
-    style={{ width: "500px", height: "500px" }} // Resize to specific resolution
-  />
-</div>
+                    <img
+                      src={`${apiUrl}/api/v1/club/club-photo/${club._id}`}
+                      alt={club.name}
+                      className="object-contain"
+                      style={{ width: "500px", height: "500px" }} // Resize to specific resolution
+                    />
+                  </div>
                   <h3 className="text-2xl font-bold text-indigo-600 mb-4 text-center">
                     {club.name}
                   </h3>
-                  <p className="text-sm text-gray-600 whitespace-pre-line leading-relaxed">
+                  <p
+                    className="text-base text-black font-light leading-loose tracking-wide text-center"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                  >
                     {club.description}
                   </p>
                 </div>
@@ -73,3 +76,4 @@ const ClubsList = () => {
 };
 
 export default ClubsList;
+
