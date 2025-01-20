@@ -9,11 +9,7 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoute.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import clubRoutes from "./routes/clubRoutes.js";
-<<<<<<< HEAD
 import adminRoutes from "./routes/adminRoute.js";
-=======
-
->>>>>>> 5dbacd246d1a2a901a771685b8f71f0ed47568c5
 
 import cors from "cors";
 
