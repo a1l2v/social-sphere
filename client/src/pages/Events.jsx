@@ -15,8 +15,10 @@ const Events = () => {
   const [categories, setCategories] = useState([]); // Categories state
   const [selectedClub, setSelectedClub] = useState(""); // Selected club for filtering
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category for filtering
+
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
+
   const navigate = useNavigate();
   const [cart, setCart] = useCart();
 
@@ -37,6 +39,7 @@ const Events = () => {
       const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
       if (data?.success) {
         setClubs(data?.club);
+
       }
     } catch (error) {
       console.log(error);
@@ -47,9 +50,11 @@ const Events = () => {
   // Fetch categories from the backend
   const getAllCategory = async () => {
     try {
+
       const { data } = await axios.get(`${apiUrl}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
+
       }
     } catch (error) {
       console.log(error);
@@ -59,6 +64,7 @@ const Events = () => {
 
   useEffect(() => {
     getAllEvents();
+
     getAllClubs();
     getAllCategory();
   }, []);
@@ -68,12 +74,21 @@ const Events = () => {
     let filtered = events;
 
     // Filter by club if selected
+   
+    
+
+    
+
+    // Filter by club if selected
     if (clubID) {
       filtered = filtered.filter((event) => event.club === clubID);
+      console.log(filtered);
+
     }
 
     // Filter by category if selected
     if (categoryID) {
+
       filtered = filtered.filter((event) => event.category._id === categoryID);
     }
 
@@ -84,8 +99,14 @@ const Events = () => {
       );
     }
 
+      
+   
+    
+
+
     setFilteredEvents(filtered);
   };
+
 
   // Handle search input change
   const handleSearchChange = (query) => {
@@ -122,9 +143,11 @@ const Events = () => {
   const handleCategoryChange = (categoryID) => {
     setSelectedCategory(categoryID);
     filterEvents(selectedClub, categoryID, searchQuery);
+
   };
 
   return (
+    
     <Layout>
       <div className="w-full bg-gradient-to-r from-indigo-100 via-gray-100 to-indigo-200 py-12">
         <div className="container mx-auto text-center">
@@ -134,6 +157,7 @@ const Events = () => {
           >
             Upcoming Events
           </h1>
+
 
           {/* Search Bar */}
           <div className="relative mb-8">
@@ -159,6 +183,7 @@ const Events = () => {
     </div>
   )}
 </div>
+
 
           {/* Club Filter */}
           <div className="mb-8">
@@ -222,6 +247,7 @@ const Events = () => {
             </div>
           </div>
 
+
           {/* Events Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredEvents.map((event) => (
@@ -235,7 +261,9 @@ const Events = () => {
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6 space-y-4">
-                  <h3 className="text-xl font-semibold text-gray-800">{event.name}</h3>
+                  <h3 className="text-xl font-semibold text-gray-800">
+                    {event.name}
+                  </h3>
                   <p className="text-sm text-gray-600">{event.description}</p>
                   <p className="text-sm font-semibold text-indigo-600">
                     Venue: {event.venue}
@@ -243,7 +271,13 @@ const Events = () => {
                   <p className="text-sm text-gray-500">
                     Date: {new Date(event.event_date).toLocaleDateString()}
                   </p>
+
                   <p className="text-sm text-gray-500">Team Size: {event.team_size}</p>
+
+                  <p className="text-sm text-gray-500">
+                    Team Size: {event.team_size}
+                  </p>
+
                   <div className="mt-4 flex justify-between">
                     <button
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
@@ -256,7 +290,11 @@ const Events = () => {
                       onClick={() => {
                         setCart([...cart, event]);
                         localStorage.setItem("cart", JSON.stringify([...cart, event]));
+
                         navigate("/cart");
+
+                        navigate('/cart');
+
                         toast.success("Event Added to Cart");
                       }}
                     >
