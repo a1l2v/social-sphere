@@ -15,8 +15,10 @@ const Events = () => {
   const [categories, setCategories] = useState([]); // Categories state
   const [selectedClub, setSelectedClub] = useState(""); // Selected club for filtering
   const [selectedCategory, setSelectedCategory] = useState(""); // Selected category for filtering
+
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
   const [searchSuggestions, setSearchSuggestions] = useState([]); // Search suggestions
+
   const navigate = useNavigate();
   const [cart, setCart] = useCart();
 
@@ -37,6 +39,7 @@ const Events = () => {
       const { data } = await axios.get(`${apiUrl}/api/v1/club/get-club`);
       if (data?.success) {
         setClubs(data?.club);
+
       }
     } catch (error) {
       console.log(error);
@@ -47,9 +50,11 @@ const Events = () => {
   // Fetch categories from the backend
   const getAllCategory = async () => {
     try {
+
       const { data } = await axios.get(`${apiUrl}/api/v1/category/get-category`);
       if (data?.success) {
         setCategories(data?.category);
+
       }
     } catch (error) {
       console.log(error);
@@ -59,6 +64,7 @@ const Events = () => {
 
   useEffect(() => {
     getAllEvents();
+
     getAllClubs();
     getAllCategory();
   }, []);
@@ -68,12 +74,21 @@ const Events = () => {
     let filtered = events;
 
     // Filter by club if selected
+   
+    
+
+    
+
+    // Filter by club if selected
     if (clubID) {
       filtered = filtered.filter((event) => event.club === clubID);
+      console.log(filtered);
+
     }
 
     // Filter by category if selected
     if (categoryID) {
+
       filtered = filtered.filter((event) => event.category._id === categoryID);
     }
 
@@ -84,8 +99,14 @@ const Events = () => {
       );
     }
 
+      
+   
+    
+
+
     setFilteredEvents(filtered);
   };
+
 
   // Handle search input change
   const handleSearchChange = (query) => {
@@ -122,9 +143,11 @@ const Events = () => {
   const handleCategoryChange = (categoryID) => {
     setSelectedCategory(categoryID);
     filterEvents(selectedClub, categoryID, searchQuery);
+
   };
 
   return (
+    
     <Layout>
       <div className="w-full bg-gradient-to-r from-indigo-100 via-gray-100 to-indigo-200 py-12">
         <div className="container mx-auto">
