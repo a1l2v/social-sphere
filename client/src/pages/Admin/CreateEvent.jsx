@@ -83,19 +83,19 @@ const CreateProduct = () => {
     }
 
     try {
-      const productData = new FormData();
-      productData.append("name", name);
-      productData.append("description", description);
-      productData.append("price", price);
-      productData.append("photo", photo);
-      productData.append("category", category);
-      productData.append("club", club);
-      productData.append("team_size", teamSize);
-      productData.append("venue", venue);
-      productData.append("event_date", eventDate);
-      productData.append("contact", contact);
+      const EventData = new FormData();
+      EventData.append("name", name);
+      EventData.append("description", description);
+      EventData.append("price", price);
+      EventData.append("photo", photo);
+      EventData.append("category", category);
+      EventData.append("club", club);
+      EventData.append("team_size", teamSize);
+      EventData.append("venue", venue);
+      EventData.append("event_date", eventDate);
+      EventData.append("contact", contact);
 
-      const { data } = await axios.post(`${apiUrl}/api/v1/event/create-event`, productData);
+      const { data } = await axios.post(`${apiUrl}/api/v1/event/create-event`, EventData);
       if (data?.success) {
         toast.success("Product Created Successfully");
         navigate("/dashboard/admin/products");
