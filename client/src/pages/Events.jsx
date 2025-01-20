@@ -127,145 +127,140 @@ const Events = () => {
   return (
     <Layout>
       <div className="w-full bg-gradient-to-r from-indigo-100 via-gray-100 to-indigo-200 py-12">
-        <div className="container mx-auto text-center">
-          <h1
-            className="text-5xl font-bold text-indigo-800 mb-12"
-            style={{ fontFamily: "Poppins, sans-serif" }}
-          >
-            Upcoming Events
-          </h1>
-
+        <div className="container mx-auto">
           {/* Search Bar */}
           <div className="relative mb-8">
-  <input
-    type="text"
-    placeholder="Search events by name..."
-    value={searchQuery}
-    onChange={(e) => handleSearchChange(e.target.value)}
-    className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-  />
-  {/* Dropdown List */}
-  {searchSuggestions.length > 0 && (
-    <div className="absolute left-0 right-0 mx-auto z-10 bg-white border border-gray-300 rounded-lg mt-2 w-full md:w-1/2">
-      {searchSuggestions.map((event) => (
-        <div
-          key={event._id}
-          onClick={() => handleSuggestionSelect(event.name)}
-          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-        >
-          {event.name}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
-
-          {/* Club Filter */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-semibold text-indigo-800">Filter by Club</h3>
-            <div className="flex justify-center space-x-4 mt-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="club"
-                  value=""
-                  checked={selectedClub === ""}
-                  onChange={() => handleClubChange("")}
-                  className="mr-2"
-                />
-                All
-              </label>
-              {clubs.map((club) => (
-                <label key={club._id} className="flex items-center">
-                  <input
-                    type="radio"
-                    name="club"
-                    value={club._id}
-                    checked={selectedClub === club._id}
-                    onChange={() => handleClubChange(club._id)}
-                    className="mr-2"
-                  />
-                  {club.name}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="mb-8">
-            <h3 className="text-2xl font-semibold text-indigo-800">Filter by Category</h3>
-            <div className="flex justify-center space-x-4 mt-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="category"
-                  value=""
-                  checked={selectedCategory === ""}
-                  onChange={() => handleCategoryChange("")}
-                  className="mr-2"
-                />
-                All
-              </label>
-              {categories.map((category) => (
-                <label key={category._id} className="flex items-center">
-                  <input
-                    type="radio"
-                    name="category"
-                    value={category._id}
-                    checked={selectedCategory === category._id}
-                    onChange={() => handleCategoryChange(category._id)}
-                    className="mr-2"
-                  />
-                  {category.name}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Events Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredEvents.map((event) => (
-              <div
-                key={event._id}
-                className="bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform hover:scale-105"
-              >
-                <img
-                  src={`${apiUrl}/api/v1/event/event-photo/${event._id}`}
-                  alt={event.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6 space-y-4">
-                  <h3 className="text-xl font-semibold text-gray-800">{event.name}</h3>
-                  <p className="text-sm text-gray-600">{event.description}</p>
-                  <p className="text-sm font-semibold text-indigo-600">
-                    Venue: {event.venue}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Date: {new Date(event.event_date).toLocaleDateString()}
-                  </p>
-                  <p className="text-sm text-gray-500">Team Size: {event.team_size}</p>
-                  <div className="mt-4 flex justify-between">
-                    <button
-                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
-                      onClick={() => navigate(`/events/${event.slug}`)}
-                    >
-                      More Info
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
-                      onClick={() => {
-                        setCart([...cart, event]);
-                        localStorage.setItem("cart", JSON.stringify([...cart, event]));
-                        navigate("/cart");
-                        toast.success("Event Added to Cart");
-                      }}
-                    >
-                      Register
-                    </button>
+            <h1 className="text-4xl font-bold text-indigo-800 mb-6 text-center">Upcoming Events</h1>
+            <input
+              type="text"
+              placeholder="Search events by name..."
+              value={searchQuery}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {searchSuggestions.length > 0 && (
+              <div className="absolute left-0 right-0 z-10 bg-white border border-gray-300 rounded-lg mt-2 w-full">
+                {searchSuggestions.map((event) => (
+                  <div
+                    key={event._id}
+                    onClick={() => handleSuggestionSelect(event.name)}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {event.name}
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="flex">
+            {/* Sidebar Filters */}
+            <div className="w-1/4 p-6 bg-white rounded-lg shadow-lg">
+              <div className="mb-6">
+                <h3 className="text-2xl font-semibold text-indigo-800 mb-4">Filter by Club</h3>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="club"
+                      value=""
+                      checked={selectedClub === ""}
+                      onChange={() => handleClubChange("")}
+                      className="mr-2"
+                    />
+                    All
+                  </label>
+                  {clubs.map((club) => (
+                    <label key={club._id} className="flex items-center">
+                      <input
+                        type="radio"
+                        name="club"
+                        value={club._id}
+                        checked={selectedClub === club._id}
+                        onChange={() => handleClubChange(club._id)}
+                        className="mr-2"
+                      />
+                      {club.name}
+                    </label>
+                  ))}
                 </div>
               </div>
-            ))}
+              <div>
+                <h3 className="text-2xl font-semibold text-indigo-800 mb-4">Filter by Category</h3>
+                <div className="space-y-2">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="category"
+                      value=""
+                      checked={selectedCategory === ""}
+                      onChange={() => handleCategoryChange("")}
+                      className="mr-2"
+                    />
+                    All
+                  </label>
+                  {categories.map((category) => (
+                    <label key={category._id} className="flex items-center">
+                      <input
+                        type="radio"
+                        name="category"
+                        value={category._id}
+                        checked={selectedCategory === category._id}
+                        onChange={() => handleCategoryChange(category._id)}
+                        className="mr-2"
+                      />
+                      {category.name}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Events Grid */}
+            <div className="w-3/4 ml-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+              {filteredEvents.map((event) => (
+                <div
+                  key={event._id}
+                  className="bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform hover:scale-105"
+                >
+                  <img
+                    src={`${apiUrl}/api/v1/event/event-photo/${event._id}`}
+                    alt={event.name}
+                    className="w-full h-60 object-cover"
+                  />
+                  <div className="p-6 space-y-4">
+                    <h3 className="text-2xl font-semibold text-gray-800">{event.name}</h3>
+                    <p className="text-sm text-gray-600">{event.description}</p>
+                    <p className="text-sm font-semibold text-indigo-600">
+                      Venue: {event.venue}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Date: {new Date(event.event_date).toLocaleDateString()}
+                    </p>
+                    <p className="text-sm text-gray-500">Team Size: {event.team_size}</p>
+                    <div className="mt-4 flex justify-between">
+                      <button
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-all"
+                        onClick={() => navigate(`/events/${event.slug}`)}
+                      >
+                        More Info
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-all"
+                        onClick={() => {
+                          setCart([...cart, event]);
+                          localStorage.setItem("cart", JSON.stringify([...cart, event]));
+                          navigate("/cart");
+                          toast.success("Event Added to Cart");
+                        }}
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -274,3 +269,4 @@ const Events = () => {
 };
 
 export default Events;
+
