@@ -45,19 +45,15 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong in fetching categories");
+      toast.error("Something went wrong in fetching clubs");
     }
   };
-
 
   useEffect(() => {
     getAllCategory();
     getAllClubs();
   }, []);
 
-  
-
-  // Frontend validation before submitting the product creation form
   const validateForm = () => {
     if (!name) return "Name is Required";
     if (!description) return "Description is Required";
@@ -72,7 +68,6 @@ const CreateProduct = () => {
     return null;
   };
 
-  // Create product function
   const handleCreate = async (e) => {
     e.preventDefault();
     const errorMessage = validateForm();
