@@ -45,19 +45,15 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong in fetching categories");
+      toast.error("Something went wrong in fetching clubs");
     }
   };
-
 
   useEffect(() => {
     getAllCategory();
     getAllClubs();
   }, []);
 
-  
-
-  // Frontend validation before submitting the product creation form
   const validateForm = () => {
     if (!name) return "Name is Required";
     if (!description) return "Description is Required";
@@ -72,7 +68,6 @@ const CreateProduct = () => {
     return null;
   };
 
-  // Create product function
   const handleCreate = async (e) => {
     e.preventDefault();
     const errorMessage = validateForm();
@@ -110,144 +105,115 @@ const CreateProduct = () => {
 
   return (
     <Layout title={"Dashboard - Create EVENT"}>
-      <div className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 min-h-screen">
-        <div className="container mx-auto p-6">
-          <div className="grid grid-cols-12 gap-6">
-            {/* Admin Menu */}
-            <div className="col-span-12 md:col-span-3">
-              <AdminMenu />
-            </div>
+      <div className="w-full min-h-screen flex justify-center items-center bg-gray-50">
+        <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-xl">
+          <h1 className="text-2xl font-semibold text-gray-800 mb-6">Create Event</h1>
+          <form onSubmit={handleCreate} className="space-y-4">
+            <Select
+              bordered={false}
+              placeholder="Select a category"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(value) => setCategory(value)}
+            >
+              {categories?.map((c) => (
+                <Option key={c._id} value={c._id}>
+                  {c.name}
+                </Option>
+              ))}
+            </Select>
 
-            {/* Main content for creating product */}
-            <div className="col-span-12 md:col-span-9">
-              <h1 className="text-3xl font-semibold mb-6 text-gray-800">Create Event</h1>
+            <Select
+              bordered={false}
+              placeholder="Select a club"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(value) => setClub(value)}
+            >
+              {clubs?.map((c) => (
+                <Option key={c._id} value={c._id}>
+                  {c.name}
+                </Option>
+              ))}
+            </Select>
 
-              <div className="space-y-6 w-full md:w-3/4">
-                {/* Category Select */}
-                <Select
-                  bordered={true}
-                  placeholder="Select a category"
-                  size="large"
-                  showSearch
-                  className="w-full mb-4"
-                  onChange={(value) => setCategory(value)}
-                  style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
-                >
-                  {categories?.map((c) => (
-                    <Option key={c._id} value={c._id}>
-                      {c.name}
-                    </Option>
-                  ))}
-                </Select>
-                <Select
-                  bordered={true}
-                  placeholder="Select a club"
-                  size="large"
-                  showSearch
-                  className="w-full mb-4"
-                  onChange={(value) => setClub(value)}
-                  style={{ border: "2px solid #ddd", borderRadius: "0.375rem", padding: "0.5rem" }}
-                >
-                  {clubs?.map((c) => (
-                    <Option key={c._id} value={c._id}>
-                      {c.name}
-                    </Option>
-                  ))}
-                </Select>
+            <input
+              type="file"
+              name="photo"
+              accept="image/*"
+              onChange={(e) => setPhoto(e.target.files[0])}
+              className="w-full border border-gray-300 rounded-md p-2 cursor-pointer focus:outline-none"
+            />
 
-
-                {/* Photo Upload */}
-                <div>
-                  <label className="border-2 border-gray-300 bg-white py-2 px-4 rounded-md shadow-sm cursor-pointer w-full text-center">
-                    {photo ? photo.name : "Upload Photo"}
-                    <input
-                      type="file"
-                      name="photo"
-                      accept="image/*"
-                      onChange={(e) => setPhoto(e.target.files[0])}
-                      hidden
-                    />
-                  </label>
-                </div>
-
-                {/* Photo Preview */}
-                {photo && (
-                  <div className="text-center mt-4">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="product_photo"
-                      className="h-52 mx-auto object-cover rounded-md"
-                    />
-                  </div>
-                )}
-
-                {/* Product Details Inputs */}
-                <div className="space-y-4">
-                  <input
-                    type="text"
-                    value={name}
-                    placeholder="Event Name"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setName(e.target.value)}
-                  />
-
-                  <textarea
-                    value={description}
-                    placeholder="Event Description"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
-
-                  <input
-                    type="number"
-                    value={price}
-                    placeholder="Event Price"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-
-                  <input
-                    type="text"
-                    value={teamSize}
-                    placeholder="Team Size"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setTeamSize(e.target.value)}
-                  />
-
-                  <input
-                    type="text"
-                    value={venue}
-                    placeholder="Venue"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setVenue(e.target.value)}
-                  />
-
-                  <input
-                    type="date"
-                    value={eventDate}
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setEventDate(e.target.value)}
-                  />
-
-                  <input
-                    type="text"
-                    value={contact}
-                    placeholder="Contact Information"
-                    className="border-2 border-gray-300 w-full px-4 py-2 rounded-md"
-                    onChange={(e) => setContact(e.target.value)}
-                  />
-                </div>
-
-                {/* Create Product Button */}
-                <button
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full"
-                  onClick={handleCreate}
-                >
-                  CREATE EVENT
-                </button>
+            {photo && (
+              <div className="text-center mt-4">
+                <img
+                  src={URL.createObjectURL(photo)}
+                  alt="product_photo"
+                  className="h-52 mx-auto object-cover rounded-md"
+                />
               </div>
-            </div>
-          </div>
+            )}
+
+            <input
+              type="text"
+              value={name}
+              placeholder="Event Name"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <textarea
+              value={description}
+              placeholder="Event Description"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+
+            <input
+              type="number"
+              value={price}
+              placeholder="Event Price"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+
+            <input
+              type="text"
+              value={teamSize}
+              placeholder="Team Size"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setTeamSize(e.target.value)}
+            />
+
+            <input
+              type="text"
+              value={venue}
+              placeholder="Venue"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setVenue(e.target.value)}
+            />
+
+            <input
+              type="date"
+              value={eventDate}
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setEventDate(e.target.value)}
+            />
+
+            <input
+              type="text"
+              value={contact}
+              placeholder="Contact Information"
+              className="w-full border border-gray-300 rounded-md p-2 focus:outline-none"
+              onChange={(e) => setContact(e.target.value)}
+            />
+
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-full"
+              type="submit"
+            >
+              Create Event
+            </button>
+          </form>
         </div>
       </div>
     </Layout>
