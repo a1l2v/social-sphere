@@ -39,14 +39,14 @@ const Products = () => {
           {/* Product List */}
           <div className="col-span-12 md:col-span-9">
             <h1 className="text-3xl font-semibold mb-6 text-center">
-              All Products List
+              All Events List
             </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products?.map((p) => (
                 <Link
                   key={p._id}
-                  to={`/dashboard/admin/product/${p.slug}`}
+                  to={`/dashboard/admin/event/${p.slug}`}
                   className="hover:shadow-lg transform hover:-translate-y-1 transition-all duration-200"
                 >
                   <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-md">

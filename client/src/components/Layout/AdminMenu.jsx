@@ -42,6 +42,18 @@ const AdminMenu = () => {
         >
           Users
         </NavLink>
+        <NavLink
+          to="/dashboard/admin/events"
+          className={({ isActive }) =>
+            `block py-2 px-4 rounded-md text-lg font-medium ${
+              isActive
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700 hover:bg-blue-100"
+            }`
+          }
+        >
+          Manage Events
+        </NavLink>
       </div>
     </div>
   );

@@ -122,12 +122,12 @@ const Login = () => {
         </div>
 
         {/* Right side (Image) */}
-        <div className="hidden md:flex w-1/2 justify-center items-center">
-          <div className="relative p-4">
+        <div className="hidden md:flex w-1/2 justify-center items-center bg-blue-900">
+          <div className="relative p-6">
             <img
               src={signinImage}
               alt="Sign In"
-              className="w-full h-[400px] object-cover rounded-lg border-2 border-gray-300 shadow-lg"
+              className="w-full h-[500px] object-cover rounded-lg border-2 border-gray-300 shadow-lg"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 opacity-30 rounded-lg"></div>
           </div>

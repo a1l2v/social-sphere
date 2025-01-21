@@ -129,7 +129,7 @@ const UpdateProduct = () => {
       );
       if (data?.success) {
         toast.success("Product Updated Successfully");
-        navigate("/dashboard/admin/products");
+        navigate("/dashboard/admin/events");
       } else {
         toast.error(data?.message);
       }
@@ -149,7 +149,7 @@ const UpdateProduct = () => {
         `${apiUrl}/api/v1/event/event/${id}`
       );
       toast.success("Product Deleted Successfully");
-      navigate("/dashboard/admin/products");
+      navigate("/dashboard/admin/events");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong while deleting");
@@ -164,7 +164,7 @@ const UpdateProduct = () => {
             <AdminMenu />
           </div>
           <div className="col-span-12 md:col-span-9">
-            <h1 className="text-3xl font-semibold mb-6">Update Product</h1>
+            <h1 className="text-3xl font-semibold mb-6">Update Event</h1>
 
             <div className="space-y-4 w-full md:w-3/4">
               <Select
@@ -286,13 +286,13 @@ const UpdateProduct = () => {
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md w-full"
                   onClick={handleUpdate}
                 >
-                  UPDATE PRODUCT
+                  UPDATE EVENT
                 </button>
                 <button
                   className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md w-full"
                   onClick={handleDelete}
                 >
-                  DELETE PRODUCTT
+                  DELETE EVENT
                 </button>
               </div>
             </div>
