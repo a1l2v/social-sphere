@@ -26,47 +26,56 @@ const Users = () => {
 
   return (
     <Layout title={"Dashboard - All Users"}>
-      <div className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 min-h-screen">
-        <div className="container mx-auto p-4">
-          <div className="grid grid-cols-12 gap-6">
-            {/* Admin Menu */}
-            <div className="col-span-12 md:col-span-3">
-              <AdminMenu />
-            </div>
-            {/* Users Content */}
-            <div className="col-span-12 md:col-span-9">
-              <div className="bg-white shadow-md rounded-lg p-6">
-                <h1 className="text-3xl font-semibold text-gray-800 mb-6">All Users</h1>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full border border-gray-300 divide-y divide-gray-200">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">ID</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Name</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Email</th>
-                        <th className="px-4 py-2 text-left text-sm font-medium text-gray-600">Role</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {users.map((user) => (
-                        <tr key={user._id}>
-                          <td className="px-4 py-2 text-sm text-gray-700">{user._id}</td>
-                          <td className="px-4 py-2 text-sm text-gray-700">{user.name}</td>
-                          <td className="px-4 py-2 text-sm text-gray-700">{user.email}</td>
-                          <td className="px-4 py-2 text-sm text-gray-700">
-                            {user.role === 1 ? "Admin" : "User"}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+  <div className="w-full bg-gradient-to-r from-blue-50 via-indigo-100 to-purple-200 min-h-screen">
+    <div className="container mx-auto p-6">
+      <div className="grid grid-cols-12 gap-6">
+        
+        {/* Admin Menu */}
+        <div className="col-span-12 md:col-span-3">
+          <AdminMenu />
+        </div>
+
+        {/* Users Content */}
+        <div className="col-span-12 md:col-span-9">
+          <div className="bg-white shadow-lg rounded-lg p-8">
+            <h1 className="text-3xl font-semibold text-gray-800 mb-6">All Users</h1>
+            
+            {/* Table Section */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full border border-gray-300 divide-y divide-gray-200">
+                <thead className="bg-indigo-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">ID</th>
+                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Name</th>
+                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Email</th>
+                    <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Role</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {users.map((user) => (
+                    <tr
+                      key={user._id}
+                      className="hover:bg-indigo-50 cursor-pointer transition-all duration-200"
+                    >
+                      <td className="px-6 py-4 text-sm text-gray-700">{user._id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-700">{user.name}</td>
+                      <td className="px-6 py-4 text-sm text-gray-700">{user.email}</td>
+                      <td className="px-6 py-4 text-sm text-gray-700">
+                        {user.role === 1 ? "Admin" : "User"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
+
       </div>
-    </Layout>
+    </div>
+  </div>
+</Layout>
+
   );
 };
 
