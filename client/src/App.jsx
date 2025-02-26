@@ -23,7 +23,8 @@ import CreateClub from "./pages/Admin/CreateClub";
 import Events from "./pages/Events";
 import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
-import { Payment } from "./pages/Payment";
+import Payment from "./pages/Payment";
+import OrderSuccessPage from "./pages/OrderSuccessPage";
 function App() {
   return (
     <>
@@ -32,7 +33,8 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/events/:slug" element={<ProductDetails />} />
-        <Route path="/payment/:id" element={<Payment/>} />
+        <Route path="/payment/:orderId" element={<Payment/>} />
+        <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashboard />} />
           <Route path="user/orders" element={<Orders />} />
